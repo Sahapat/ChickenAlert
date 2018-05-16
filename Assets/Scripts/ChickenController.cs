@@ -25,6 +25,29 @@ public class ChickenController : MonoBehaviour
             SetAlert();
         }
     }
+    public GameObject GetRandomChickenOnLand()
+    {
+        return LandChicken[UnityEngine.Random.Range(0, LandChicken.Count)].gameObject;
+    }
+    public void RemoveChicken(int id)
+    {
+        for(int i =0;i<LandChicken.Count;i++)
+        {
+            if(LandChicken[i].GetInstanceID() == id)
+            {
+                LandChicken.RemoveAt(i);
+                return;
+            }
+        }
+        for(int i = 0;i<FenceChicken.Count;i++)
+        {
+            if(FenceChicken[i].GetInstanceID() == id)
+            {
+                FenceChicken.RemoveAt(i);
+                return;
+            }
+        }
+    }
     private void SetAlert()
     {
         for (int i = 0; i < LandChicken.Count; i++)

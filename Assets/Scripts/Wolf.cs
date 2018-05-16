@@ -8,10 +8,19 @@ public class Wolf : MonoBehaviour
     [SerializeField] private Animator anim;
     [SerializeField] private float speed = 4f;
     [SerializeField] private float moveTowardDelta;
+    [SerializeField] private Transform lookAtPos;
+    [SerializeField] private float eatDuration;
+    [SerializeField] private float stunDuration;
+
+    private bool isEat;
+    private float eatCounter;
+    private float stunCounter;
+    private bool isHaveTarget;
+
+    private WolfController m_wolfController;
     private GameObject target;
     private Vector3 destination;
-
-    [SerializeField]private bool moveToPositionTrigger;
+    private bool moveToPositionTrigger;
 
     private void Awake()
     {
@@ -19,31 +28,66 @@ public class Wolf : MonoBehaviour
     }
     private void Update()
     {
-        if(moveToPositionTrigger)
+        if (moveToPositionTrigger)
         {
-            SetEnableAgent(false);
             agentParent.transform.position = Vector3.MoveTowards(agentParent.transform.position, destination, moveTowardDelta);
-            transform.LookAt(destination);
+            agentParent.transform.LookAt(destination);
+            isHaveTarget = true;
             if (Vector3.Distance(agentParent.transform.position, destination) < 0.5f)
             {
+                agentParent.transform.LookAt(lookAtPos);
                 SetEnableAgent(true);
                 moveToPositionTrigger = false;
-                SetDestination();
             }
         }
+        else if (agentParent.remainingDistance < 0.5f && !isEat)
+        {
+            agentParent.speed = speed * 2;
+        }
+        else if (agentParent.remainingDistance < 0.1f && !isEat)
+        {
+            agentParent.isStopped = true;
+            Eat();
+            eatCounter = Time.time + eatDuration;
+            isEat = true;
+        }
+        else if (eatCounter < Time.time && stunCounter < Time.time)
+        {
+            SetDestination();
+            agentParent.speed = speed;
+        }
+        //Remaindistance bug after reach start pos it's 0
     }
-    public void MoveToPosition(Vector3 position, GameObject target)
+    public void InitWolf(Vector3 position, GameObject target,WolfController controller)
     {
         moveToPositionTrigger = true;
         destination = position;
+        this.m_wolfController = controller;
         this.target = target;
     }
-    private void SetEnableAgent(bool status)
+    public void SetEnableAgent(bool status)
     {
         agentParent.enabled = status;
     }
+    private void Eat()
+    {
+        if(target.GetComponentInChildren<Chicken>() != null)
+        {
+            Chicken chicken = target.GetComponentInChildren<Chicken>();
+            chicken.Dead();
+            m_wolfController.KillChicken(chicken.GetInstanceID());
+        }
+    }
     private void SetDestination()
     {
-        agentParent.SetDestination(target.transform.position);
+        if (isHaveTarget)
+        {
+            agentParent.isStopped = false;
+            agentParent.SetDestination(target.transform.position);
+        }
+        else
+        {
+            agentParent.isStopped = true;
+        }
     }
 }
