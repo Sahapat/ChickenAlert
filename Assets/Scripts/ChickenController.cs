@@ -10,6 +10,7 @@ public class ChickenController : MonoBehaviour
     [SerializeField] private int startChickenCount;
     public int currentChickCount;
     public bool setAlert;
+    public bool setDead;
     private void Awake()
     {
         var temp = FindObjectsOfType<Chicken>();

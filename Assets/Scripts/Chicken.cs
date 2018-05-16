@@ -17,6 +17,7 @@ public class Chicken : MonoBehaviour
         public Vector2 min;
     }
     [SerializeField] private NavMeshAgent agentParent;
+    [SerializeField] private Animator anim;
     [SerializeField] private float normalSpeed;
     [SerializeField] private float alertSpeed;
     [SerializeField] private float jumpScale;
@@ -31,7 +32,8 @@ public class Chicken : MonoBehaviour
     public bool isAlert;
     public bool isSafe;
     public bool isOnpush;
-    public bool checker;
+    private bool isDead;
+
     private float timeCounter;
     private float clamCounter;
     private bool ResetAlertTrigger;
@@ -45,6 +47,11 @@ public class Chicken : MonoBehaviour
     }
     private void Update()
     {
+        if(isDead)
+        {
+            agentParent.isStopped = true;
+            return;
+        }
         if (!isOnpush)
         {
             agentParent.isStopped = false;
@@ -80,12 +87,20 @@ public class Chicken : MonoBehaviour
             ResetAlertTrigger = true;
         }
     }
+    public void Dead()
+    {
+        anim.SetTrigger("Die");
+        isDead = true;
+        Destroy(this.gameObject, 3f);
+    }
     private void Alert()
     {
         agentParent.radius = landRadius;
         agentParent.speed = alertSpeed;
         if (agentParent.remainingDistance < 0.2f)
         {
+            anim.SetBool("isRunning", true);
+            anim.speed = 0.5f;
             FindPosition(AlertPositionRange);
             agentParent.SetDestination(targetPos);
             StopAllCoroutines();
@@ -98,13 +113,15 @@ public class Chicken : MonoBehaviour
         agentParent.speed = normalSpeed;
         if (agentParent.remainingDistance < 0.2f && timeCounter < Time.time)
         {
+            anim.SetBool("isRunning", true);
+            anim.speed = 1f;
             FindPosition(idlePositionRange);
             agentParent.SetDestination(targetPos);
             timeCounter = Time.time + 2.5f;
         }
         else if(agentParent.remainingDistance < 0.2f)
         {
-
+            anim.SetBool("isRunning", false);
         }
     }
     private void Safe()
@@ -113,6 +130,8 @@ public class Chicken : MonoBehaviour
         agentParent.speed = normalSpeed;
         if ((agentParent.remainingDistance < 0.2f && timeCounter < Time.time)) 
         {
+            anim.SetBool("isRunning", true);
+            anim.speed = 1f;
             float randX = UnityEngine.Random.Range(safeZone.min.x, safeZone.max.x);
             float randZ = UnityEngine.Random.Range(safeZone.min.y, safeZone.max.y);
             
@@ -122,7 +141,7 @@ public class Chicken : MonoBehaviour
         }
         else if(agentParent.remainingDistance < 0.2f)
         {
-
+            anim.SetBool("isRunning", false);
         }
     }
     private void FindPosition(float distance)
