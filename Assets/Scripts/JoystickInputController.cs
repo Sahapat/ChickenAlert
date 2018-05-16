@@ -2,7 +2,7 @@
 
 public class JoystickInputController : MonoBehaviour
 {
-    public static Vector2 getMovement(byte playerId,bool isJoy)
+    public static Vector2 GetMovement(byte playerId,bool isJoy)
     {
         float x = 0;
         float y = 0;
@@ -58,5 +58,33 @@ public class JoystickInputController : MonoBehaviour
         }
         movement = new Vector2(x, y);
         return movement;
+    }
+    public static bool GetPush(byte playerId,bool isJoy)
+    {
+        bool isPress = false;
+        switch(playerId)
+        {
+            case 1:
+                if (isJoy)
+                {
+                    isPress =  Input.GetKey(KeyCode.Joystick1Button1);
+                }
+                else
+                {
+                    isPress = Input.GetKey(KeyCode.G);
+                }
+                break;
+            case 2:
+                if (isJoy)
+                {
+                    isPress = Input.GetKey(KeyCode.Joystick2Button1);
+                }
+                else
+                {
+                    isPress = Input.GetKey(KeyCode.KeypadPlus);
+                }
+                break;
+        }
+        return isPress;
     }
 }
