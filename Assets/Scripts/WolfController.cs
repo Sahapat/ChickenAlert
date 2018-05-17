@@ -32,6 +32,10 @@ public class WolfController : MonoBehaviour
     {
         m_chickenController.RemoveChicken(id);
     }
+    public GameObject getChicken()
+    {
+        return m_chickenController.GetRandomChickenOnLand();
+    }
     private void SpawnWolf()
     {
         int spawnIndex = UnityEngine.Random.Range(0, wolfSpawns.Length);
@@ -39,6 +43,6 @@ public class WolfController : MonoBehaviour
                             ,wolfSpawns[spawnIndex].spawnAndDestination[0].position
                             , Quaternion.identity);
         Wolf wolf = temp.GetComponentInChildren<Wolf>();
-        wolf.InitWolf(wolfSpawns[spawnIndex].spawnAndDestination[1].position, m_chickenController.GetRandomChickenOnLand(), this);
+        wolf.InitWolf(wolfSpawns[spawnIndex].spawnAndDestination[1].position, this);
     }
 }

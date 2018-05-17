@@ -924,6 +924,9 @@ MonoBehaviour:
   speed: 4
   moveTowardDelta: 0.1
   lookAtPos: {fileID: 4962029744424942}
+  eatDuration: 0
+  stunDuration: 0
+  screamDuration: 1.5
 --- !u!195 &195652820929669568
 NavMeshAgent:
   m_ObjectHideFlags: 1

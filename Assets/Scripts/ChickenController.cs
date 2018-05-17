@@ -27,7 +27,16 @@ public class ChickenController : MonoBehaviour
     }
     public GameObject GetRandomChickenOnLand()
     {
-        return LandChicken[UnityEngine.Random.Range(0, LandChicken.Count)].gameObject;
+        GameObject temp = null;
+        try
+        {
+            temp = LandChicken[UnityEngine.Random.Range(0, LandChicken.Count)].gameObject;
+        }
+        catch(ArgumentOutOfRangeException)
+        {
+            temp = null;
+        }
+        return temp;
     }
     public void RemoveChicken(int id)
     {

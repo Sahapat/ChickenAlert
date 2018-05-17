@@ -85,8 +85,10 @@ public class Chicken : MonoBehaviour
             isAlert = true;
             agentParent.isStopped = true;
             ResetAlertTrigger = true;
+            anim.SetBool("isRunning", true);
         }
     }
+    
     public void Dead()
     {
         anim.SetTrigger("Die");

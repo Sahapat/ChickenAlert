@@ -11,6 +11,7 @@ public class Wolf : MonoBehaviour
     [SerializeField] private Transform lookAtPos;
     [SerializeField] private float eatDuration;
     [SerializeField] private float stunDuration;
+    [SerializeField] private float screamDuration;
 
     private bool isEat;
     private float eatCounter;
@@ -32,15 +33,19 @@ public class Wolf : MonoBehaviour
         {
             agentParent.transform.position = Vector3.MoveTowards(agentParent.transform.position, destination, moveTowardDelta);
             agentParent.transform.LookAt(destination);
-            isHaveTarget = true;
             if (Vector3.Distance(agentParent.transform.position, destination) < 0.5f)
             {
                 agentParent.transform.LookAt(lookAtPos);
                 SetEnableAgent(true);
                 moveToPositionTrigger = false;
+                Scream();
             }
         }
-        else if (agentParent.remainingDistance < 0.5f && !isEat)
+        else
+        {
+            SetDestination();
+        }
+        /*else if (agentParent.remainingDistance < 0.5f && !isEat)
         {
             agentParent.speed = speed * 2;
         }
@@ -55,19 +60,37 @@ public class Wolf : MonoBehaviour
         {
             SetDestination();
             agentParent.speed = speed;
-        }
+        }*/
         //Remaindistance bug after reach start pos it's 0
     }
-    public void InitWolf(Vector3 position, GameObject target,WolfController controller)
+    public void InitWolf(Vector3 position,WolfController controller)
     {
         moveToPositionTrigger = true;
         destination = position;
         this.m_wolfController = controller;
-        this.target = target;
     }
     public void SetEnableAgent(bool status)
     {
         agentParent.enabled = status;
+    }
+    private void Scream()
+    {
+        print("scream");
+        Invoke("afterScream", screamDuration);
+    }
+    private void afterScream()
+    {
+        print("afterScream");
+        target = m_wolfController.getChicken();
+        if (target != null)
+        {
+            isHaveTarget = true;
+            print("haveChicken");
+        }
+        else
+        {
+            print("noChicken");
+        }
     }
     private void Eat()
     {
