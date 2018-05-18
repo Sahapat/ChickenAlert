@@ -97,7 +97,7 @@ public class Player : MonoBehaviour
                         anim.SetBool("isSheepHed", true);
                         anim.SetBool("isRunning", false);
                         chicken.whoPush = this.gameObject;
-                        speed = currentSpeed * 0.4f;
+                        speed = currentSpeed * 0.7f;
                     }
                     else if (currentPush != null)
                     {

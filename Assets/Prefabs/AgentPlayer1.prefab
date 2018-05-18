@@ -1624,7 +1624,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerId: 1
   agentParent: {fileID: 1267590136271768}
-  Maxspeed: 6
+  Maxspeed: 5.5
   stunDuration: 6
   isJoy: 1
   anim: {fileID: 95949007843970094}

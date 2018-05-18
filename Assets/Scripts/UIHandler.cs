@@ -88,7 +88,7 @@ public class UIHandler : MonoBehaviour
         }
         else
         {
-            Global.chickenRemain = 16;
+            Global.chickenRemain = 20;
             Global.Day = 1;
             UnityEngine.SceneManagement.SceneManager.LoadScene(2);
         }

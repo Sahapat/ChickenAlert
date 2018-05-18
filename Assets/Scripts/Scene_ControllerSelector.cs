@@ -11,22 +11,32 @@ public class Scene_ControllerSelector : MonoBehaviour
     [SerializeField] private GameObject player2Obj;
     [SerializeField] private Animator anim;
     [SerializeField] private Animator anim_guide;
+    [SerializeField] private GameObject tutorialObj;
 
     private bool isPlayer1Select;
-    private bool isFinish;
+    private bool isFinishSelect;
+    private bool isToLoadScnene;
 
     private void Start()
     {
         player1Obj.SetActive(false);
         player2Obj.SetActive(false);
+        tutorialObj.SetActive(false);
     }
     private void Update()
     {
-        if (isFinish)
+        if (isFinishSelect && !tutorialObj.activeSelf)
         {
             anim_guide.SetTrigger("Close");
             Invoke("toGameScene", 2f);
             return;
+        }
+        else if(isFinishSelect && tutorialObj.activeSelf)
+        {
+            if(Input.anyKey && !isToLoadScnene)
+            {
+                StartCoroutine(LoadScene());
+            }
         }
 
         if (!isPlayer1Select)
@@ -72,7 +82,7 @@ public class Scene_ControllerSelector : MonoBehaviour
                 Global.player2Isjoy = false;
                 player2Obj.SetActive(true);
                 player2Image.sprite = showSelected[0];
-                isFinish = true;
+                isFinishSelect = true;
             }
             else if(Input.GetKeyDown(KeyCode.KeypadEnter))
             {
@@ -80,7 +90,7 @@ public class Scene_ControllerSelector : MonoBehaviour
                 Global.player2Isjoy = false;
                 player2Obj.SetActive(true);
                 player2Image.sprite = showSelected[0];
-                isFinish = true;
+                isFinishSelect = true;
             }
             else if (Input.GetKeyDown(KeyCode.Joystick1Button7))
             {
@@ -88,7 +98,7 @@ public class Scene_ControllerSelector : MonoBehaviour
                 Global.player2Isjoy = true;
                 player2Obj.SetActive(true);
                 player2Image.sprite = showSelected[1];
-                isFinish = true;
+                isFinishSelect = true;
             }
             else if (Input.GetKeyDown(KeyCode.Joystick2Button7))
             {
@@ -96,13 +106,13 @@ public class Scene_ControllerSelector : MonoBehaviour
                 Global.player2Isjoy = true;
                 player2Obj.SetActive(true);
                 player2Image.sprite = showSelected[1];
-                isFinish = true;
+                isFinishSelect = true;
             }
         }
     }
     private void toGameScene()
     {
-        StartCoroutine(LoadScene());
+        tutorialObj.SetActive(true);
     }
     private IEnumerator LoadScene()
     {

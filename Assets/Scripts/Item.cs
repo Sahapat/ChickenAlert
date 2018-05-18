@@ -20,6 +20,7 @@ public class Item : MonoBehaviour
     [SerializeField] private LayerMask wolfMask;
     [SerializeField] private MeshRenderer meshRenderer;
     [SerializeField] private GameObject hitParticle;
+    [SerializeField] private GameObject expotionParticle;
     [SerializeField] private GameObject parentObject;
 
     private bool isUseBomb;
@@ -38,6 +39,9 @@ public class Item : MonoBehaviour
                     Wolf wolf = hit[i].gameObject.GetComponent<Wolf>();
                     wolf.TakeOut();
                 }
+                GameObject temp = Instantiate(expotionParticle, transform.position, Quaternion.identity);
+                temp.GetComponent<ParticleSystem>().Play();
+                Destroy(temp, 5f);
                 Destroy(this.gameObject);
             }
         }
@@ -56,6 +60,9 @@ public class Item : MonoBehaviour
                     wolf.TakeOut();
                 }
             }
+            GameObject temp = Instantiate(expotionParticle, transform.position, Quaternion.identity);
+            temp.GetComponent<ParticleSystem>().Play();
+            Destroy(temp, 5f);
             Destroy(this.gameObject);
         }
     }
