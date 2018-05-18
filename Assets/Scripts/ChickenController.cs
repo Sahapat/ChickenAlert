@@ -2,27 +2,65 @@
 using System.Collections.Generic;
 using System;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class ChickenController : MonoBehaviour
 {
-    [SerializeField] private List<Chicken> LandChicken;
-    [SerializeField] private List<Chicken> FenceChicken;
+    public List<Chicken> LandChicken;
+    public List<Chicken> FenceChicken;
     [SerializeField] private int startChickenCount;
+    [SerializeField] private Gamecontroller m_gamecontroller;
     public int currentChickCount;
-    public bool setAlert;
+    public bool isHaveWolf;
     public bool setDead;
-    private void Awake()
-    {
-        var temp = FindObjectsOfType<Chicken>();
-        startChickenCount = temp.Length;
-        LandChicken.AddRange(temp);
-    }
+    private bool isSet;
+    private float clamCounter;
     private void Update()
     {
-        CheckChickenStatus();
-        if (setAlert)
+        if (!m_gamecontroller.IsGameStart && !isSet)
         {
-            SetAlert();
+            var temp = FindObjectsOfType<Chicken>();
+            startChickenCount = temp.Length;
+            LandChicken.AddRange(temp);
+            isSet = true;
+        }
+        else
+        {
+            CheckChickenStatus();
+            if (clamCounter < Time.time && isHaveWolf)
+            {
+                SetAlert();
+            }
+            else
+            {
+                SetClam();
+            }
+        }
+    }
+    public void SetClam(float endTime)
+    {
+        clamCounter = endTime;
+        for (int i = 0; i < LandChicken.Count; i++)
+        {
+            LandChicken[i].isAlert = false;
+        }
+    }
+    public void SetClam()
+    {
+        for (int i = 0; i < LandChicken.Count; i++)
+        {
+            LandChicken[i].isAlert = false;
+        }
+    }
+    public void SetStop()
+    {
+        for (int i = 0; i < LandChicken.Count; i++)
+        {
+            LandChicken[i].transform.parent.GetComponent<NavMeshAgent>().isStopped = true;
+        }
+        for (int i = 0; i < FenceChicken.Count; i++)
+        {
+            FenceChicken[i].transform.parent.GetComponent<NavMeshAgent>().isStopped = true;
         }
     }
     public GameObject GetRandomChickenOnLand()
@@ -96,5 +134,6 @@ public class ChickenController : MonoBehaviour
                 FenceChicken.RemoveAt(i);
             }
         }
+        currentChickCount = LandChicken.Count + FenceChicken.Count;
     }
 }

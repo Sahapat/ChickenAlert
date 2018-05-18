@@ -32,6 +32,7 @@ public class Chicken : MonoBehaviour
     public bool isAlert;
     public bool isSafe;
     public bool isOnpush;
+    public GameObject whoPush;
     private bool isDead;
 
     private float timeCounter;

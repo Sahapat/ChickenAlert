@@ -19,15 +19,8 @@ public class WolfController : MonoBehaviour
     [SerializeField] private GameObject WolfObj;
     [SerializeField] private WolfSpawn[] wolfSpawns;
     [SerializeField] private ChickenController m_chickenController;
-    [SerializeField] private bool test;
+    [SerializeField] private Gamecontroller m_gamecontroller;
 
-    private void Update()
-    {
-        if(Input.GetKeyDown(KeyCode.Space))
-        {
-            SpawnWolf();
-        }
-    }
     public void KillChicken(int id)
     {
         m_chickenController.RemoveChicken(id);
@@ -36,13 +29,18 @@ public class WolfController : MonoBehaviour
     {
         return m_chickenController.GetRandomChickenOnLand();
     }
-    private void SpawnWolf()
+    public GameObject SpawnWolf()
     {
         int spawnIndex = UnityEngine.Random.Range(0, wolfSpawns.Length);
         GameObject temp = Instantiate(WolfObj
                             ,wolfSpawns[spawnIndex].spawnAndDestination[0].position
                             , Quaternion.identity);
         Wolf wolf = temp.GetComponentInChildren<Wolf>();
-        wolf.InitWolf(wolfSpawns[spawnIndex].spawnAndDestination[1].position, this);
+        wolf.InitWolf(wolfSpawns[spawnIndex].spawnAndDestination[1].position, wolfSpawns[spawnIndex].spawnAndDestination[0].position, this);
+        return temp;
+    }
+    public void DeleteWolf()
+    {
+        m_gamecontroller.currentWolf--;
     }
 }
