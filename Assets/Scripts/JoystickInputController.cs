@@ -2,117 +2,89 @@
 
 public class JoystickInputController : MonoBehaviour
 {
-    public static Vector3 GetMovement(int playerId,bool isJoy)
+    public static Vector2 GetMovement(ControllerSelector playerData)
     {
         float x = 0;
         float y = 0;
-        Vector3 movement = Vector3.zero;
-        if(isJoy)
+        switch (playerData)
         {
-            x = Input.GetAxisRaw("Horizontal" + playerId);
-            y = Input.GetAxisRaw("Vertical" + playerId);
-        }
-        else
-        {
-            switch(playerId)
-            {
-                case 1:
-                    if(Input.GetKey(KeyCode.A))
-                    {
-                        x = -1;
-                    }
-                    else if(Input.GetKey(KeyCode.D))
-                    {
-                        x = 1;
-                    }
+            case ControllerSelector.KEYBOARD_LEFT:
+                if (Input.GetKey(KeyCode.A))
+                {
+                    x = -1;
+                }
+                else if (Input.GetKey(KeyCode.D))
+                {
+                    x = 1;
+                }
 
-                    if (Input.GetKey(KeyCode.W))
-                    {
-                        y = 1;
-                    }
-                    else if (Input.GetKey(KeyCode.S))
-                    {
-                        y = -1;
-                    }
-                    break;
-                case 2:
-                    if (Input.GetKey(KeyCode.LeftArrow))
-                    {
-                        x = -1;
-                    }
-                    else if (Input.GetKey(KeyCode.RightArrow))
-                    {
-                        x = 1;
-                    }
+                if (Input.GetKey(KeyCode.W))
+                {
+                    y = 1;
+                }
+                else if (Input.GetKey(KeyCode.S))
+                {
+                    y = -1;
+                }
+                break;
+            case ControllerSelector.KEYBOARD_RIGHT:
+                if (Input.GetKey(KeyCode.LeftArrow))
+                {
+                    x = -1;
+                }
+                else if (Input.GetKey(KeyCode.RightArrow))
+                {
+                    x = 1;
+                }
 
-                    if (Input.GetKey(KeyCode.UpArrow))
-                    {
-                        y = 1;
-                    }
-                    else if (Input.GetKey(KeyCode.DownArrow))
-                    {
-                        y = -1;
-                    }
-                    break;
-            }
+                if (Input.GetKey(KeyCode.UpArrow))
+                {
+                    y = 1;
+                }
+                else if (Input.GetKey(KeyCode.DownArrow))
+                {
+                    y = -1;
+                }
+                break;
+            case ControllerSelector.JOYSTICK_FIRST:
+                x = Input.GetAxisRaw("Horizontal1");
+                y = Input.GetAxisRaw("Vertical1");
+                break;
+            case ControllerSelector.JOYSTICK_SECOND:
+                x = Input.GetAxisRaw("Horizontal2");
+                y = Input.GetAxisRaw("Vertical2");
+                break;
         }
-        movement = new Vector3(x, y,0);
-        return movement;
+        return new Vector2(x, y);
     }
-    public static bool GetUse(int playerId,bool isJoy)
+    public static bool GetUse(ControllerSelector playerData)
     {
-        bool isPress = false;
-        switch(playerId)
+        switch (playerData)
         {
-            case 1:
-                if(isJoy)
-                {
-                    isPress = Input.GetKeyDown(KeyCode.Joystick1Button2);
-                }
-                else
-                {
-                    isPress = Input.GetKeyDown(KeyCode.H);
-                }
-                break;
-            case 2:
-                if (isJoy)
-                {
-                    isPress = Input.GetKeyDown(KeyCode.Joystick2Button2);
-                }
-                else
-                {
-                    isPress = Input.GetKeyDown(KeyCode.Keypad5);
-                }
-                break;
+            case ControllerSelector.KEYBOARD_LEFT:
+                return Input.GetKeyDown(KeyCode.H);
+            case ControllerSelector.KEYBOARD_RIGHT:
+                return Input.GetKeyDown(KeyCode.Keypad5);
+            case ControllerSelector.JOYSTICK_FIRST:
+                return Input.GetKeyDown(KeyCode.Joystick1Button2);
+            case ControllerSelector.JOYSTICK_SECOND:
+                return Input.GetKeyDown(KeyCode.Joystick2Button2);
+            default: return false;
         }
-        return isPress;
     }
-    public static bool GetPush(int playerId,bool isJoy)
+    public static bool GetPush(ControllerSelector playerData)
     {
-        bool isPress = false;
-        switch(playerId)
+        switch (playerData)
         {
-            case 1:
-                if (isJoy)
-                {
-                    isPress =  Input.GetKey(KeyCode.Joystick1Button1);
-                }
-                else
-                {
-                    isPress = Input.GetKey(KeyCode.G);
-                }
-                break;
-            case 2:
-                if (isJoy)
-                {
-                    isPress = Input.GetKey(KeyCode.Joystick2Button1);
-                }
-                else
-                {
-                    isPress = Input.GetKey(KeyCode.KeypadPlus);
-                }
-                break;
+            case ControllerSelector.KEYBOARD_LEFT:
+                return Input.GetKeyDown(KeyCode.G);
+            case ControllerSelector.KEYBOARD_RIGHT:
+                return Input.GetKeyDown(KeyCode.KeypadPlus);
+            case ControllerSelector.JOYSTICK_FIRST:
+                return Input.GetKeyDown(KeyCode.Joystick1Button1);
+            case ControllerSelector.JOYSTICK_SECOND:
+                return Input.GetKeyDown(KeyCode.Joystick2Button1);
+            default: return false;
         }
-        return isPress;
     }
 }

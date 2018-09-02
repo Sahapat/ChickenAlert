@@ -4,119 +4,118 @@ using UnityEngine.UI;
 
 public class Scene_ControllerSelector : MonoBehaviour
 {
-    [SerializeField] private Sprite[] showSelected;
-    [SerializeField] private Image player1Image;
-    [SerializeField] private GameObject player1Obj;
-    [SerializeField] private Image player2Image;
-    [SerializeField] private GameObject player2Obj;
-    [SerializeField] private Animator anim;
-    [SerializeField] private Animator anim_guide;
-    [SerializeField] private GameObject tutorialObj;
+    private enum SelectSceneState
+    {
+        FIRST_SELECTED,
+        SECOND_SELECTED,
+        SHOW_TUTORIAl
+    };
 
-    private bool isPlayer1Select;
-    private bool isFinishSelect;
-    private bool isToLoadScnene;
+    [SerializeField] private Sprite[] showSelecteds;
+    [SerializeField] private Image player1ImageRef;
+    [SerializeField] private GameObject player1ObjRef;
+    [SerializeField] private Image player2ImageRef;
+    [SerializeField] private GameObject player2ObjRef;
+    [SerializeField] private GameObject tutorialObj;
+    [SerializeField] private Animator selectSceneAnim;
+    [SerializeField] private Animator fadeAnim;
+
+    private SelectSceneState currentState;
 
     private void Start()
     {
-        player1Obj.SetActive(false);
-        player2Obj.SetActive(false);
-        tutorialObj.SetActive(false);
+        selectionState();
     }
     private void Update()
     {
-        if (isFinishSelect && !tutorialObj.activeSelf)
+        switch (currentState)
         {
-            anim_guide.SetTrigger("Close");
-            Invoke("toGameScene", 2f);
-            return;
-        }
-        else if(isFinishSelect && tutorialObj.activeSelf)
-        {
-            if(Input.anyKey && !isToLoadScnene)
-            {
-                StartCoroutine(LoadScene());
-            }
-        }
+            case SelectSceneState.FIRST_SELECTED:
 
-        if (!isPlayer1Select)
-        {
-            if (Input.GetKeyDown(KeyCode.Return))
-            {
-                Global.player1Id = 1;
-                Global.player1Isjoy = false;
-                isPlayer1Select = true;
-                player1Obj.SetActive(true);
-                player1Image.sprite = showSelected[0];
-            }
-            else if (Input.GetKeyDown(KeyCode.KeypadEnter))
-            {
-                Global.player1Id = 2;
-                Global.player1Isjoy = false;
-                isPlayer1Select = true;
-                player1Obj.SetActive(true);
-                player1Image.sprite = showSelected[0];
-            }
-            else if (Input.GetKeyDown(KeyCode.Joystick1Button7))
-            {
-                Global.player1Id = 1;
-                Global.player1Isjoy = true;
-                isPlayer1Select = true;
-                player1Obj.SetActive(true);
-                player1Image.sprite = showSelected[1];
-            }
-            else if (Input.GetKeyDown(KeyCode.Joystick2Button7))
-            {
-                Global.player1Id = 2;
-                Global.player1Isjoy = true;
-                isPlayer1Select = true;
-                player1Obj.SetActive(true);
-                player1Image.sprite = showSelected[1];
-            }
-        }
-        else
-        {
-            if(Input.GetKeyDown(KeyCode.Return))
-            {
-                Global.player2Id = 1;
-                Global.player2Isjoy = false;
-                player2Obj.SetActive(true);
-                player2Image.sprite = showSelected[0];
-                isFinishSelect = true;
-            }
-            else if(Input.GetKeyDown(KeyCode.KeypadEnter))
-            {
-                Global.player2Id = 2;
-                Global.player2Isjoy = false;
-                player2Obj.SetActive(true);
-                player2Image.sprite = showSelected[0];
-                isFinishSelect = true;
-            }
-            else if (Input.GetKeyDown(KeyCode.Joystick1Button7))
-            {
-                Global.player2Id = 1;
-                Global.player2Isjoy = true;
-                player2Obj.SetActive(true);
-                player2Image.sprite = showSelected[1];
-                isFinishSelect = true;
-            }
-            else if (Input.GetKeyDown(KeyCode.Joystick2Button7))
-            {
-                Global.player2Id = 2;
-                Global.player2Isjoy = true;
-                player2Obj.SetActive(true);
-                player2Image.sprite = showSelected[1];
-                isFinishSelect = true;
-            }
+                if (Input.GetKeyDown(KeyCode.Return))
+                {
+                    Global.player1Selected = ControllerSelector.KEYBOARD_LEFT;
+                    player1ObjRef.SetActive(true);
+                    player1ImageRef.sprite = showSelecteds[0];
+                    currentState = SelectSceneState.SECOND_SELECTED;
+                }
+                else if (Input.GetKeyDown(KeyCode.KeypadEnter))
+                {
+                    Global.player1Selected = ControllerSelector.KEYBOARD_RIGHT;
+                    player1ObjRef.SetActive(true);
+                    player1ImageRef.sprite = showSelecteds[0];
+                    currentState = SelectSceneState.SECOND_SELECTED;
+
+                }
+                else if (Input.GetKeyDown(KeyCode.Joystick1Button7))
+                {
+                    Global.player1Selected = ControllerSelector.JOYSTICK_FIRST;
+                    player1ObjRef.SetActive(true);
+                    player1ImageRef.sprite = showSelecteds[1];
+                    currentState = SelectSceneState.SECOND_SELECTED;
+
+                }
+                else if (Input.GetKeyDown(KeyCode.Joystick2Button7))
+                {
+                    Global.player1Selected = ControllerSelector.JOYSTICK_SECOND;
+                    player1ObjRef.SetActive(true);
+                    player1ImageRef.sprite = showSelecteds[1];
+                    currentState = SelectSceneState.SECOND_SELECTED;
+
+                }
+                break;
+            case SelectSceneState.SECOND_SELECTED:
+                if (Input.GetKeyDown(KeyCode.Return))
+                {
+                    Global.player2Selected = (Global.player1Selected == ControllerSelector.KEYBOARD_LEFT) ? ControllerSelector.KEYBOARD_RIGHT : ControllerSelector.KEYBOARD_LEFT;
+                    player2ObjRef.SetActive(true);
+                    player2ImageRef.sprite = showSelecteds[0];
+                    currentState = SelectSceneState.SHOW_TUTORIAl;
+                }
+                else if (Input.GetKeyDown(KeyCode.KeypadEnter))
+                {
+                    Global.player2Selected = (Global.player1Selected == ControllerSelector.KEYBOARD_RIGHT) ? ControllerSelector.KEYBOARD_LEFT : ControllerSelector.KEYBOARD_RIGHT;
+                    player2ObjRef.SetActive(true);
+                    player2ImageRef.sprite = showSelecteds[0];
+                    currentState = SelectSceneState.SHOW_TUTORIAl;
+
+                }
+                else if (Input.GetKeyDown(KeyCode.Joystick1Button7))
+                {
+                    Global.player2Selected = (Global.player1Selected == ControllerSelector.JOYSTICK_FIRST) ? ControllerSelector.JOYSTICK_SECOND : ControllerSelector.JOYSTICK_FIRST;
+                    player2ObjRef.SetActive(true);
+                    player2ImageRef.sprite = showSelecteds[1];
+                    currentState = SelectSceneState.SHOW_TUTORIAl;
+                }
+                else if (Input.GetKeyDown(KeyCode.Joystick2Button7))
+                {
+                    Global.player2Selected = (Global.player1Selected == ControllerSelector.JOYSTICK_SECOND) ? ControllerSelector.JOYSTICK_FIRST : ControllerSelector.JOYSTICK_SECOND;
+                    player2ObjRef.SetActive(true);
+                    player2ImageRef.sprite = showSelecteds[1];
+                    currentState = SelectSceneState.SHOW_TUTORIAl;
+                }
+                break;
+            case SelectSceneState.SHOW_TUTORIAl:
+                if (!tutorialObj.activeSelf) tutorialState();
+                else if (Input.anyKey) StartCoroutine(LoadScene());
+                break;
         }
     }
-    private void toGameScene()
+    private void selectionState()
+    {
+        player1ObjRef.SetActive(false);
+        player2ObjRef.SetActive(false);
+        tutorialObj.SetActive(false);
+        selectSceneAnim.SetTrigger("Show");
+    }
+    private void tutorialState()
     {
         tutorialObj.SetActive(true);
+        selectSceneAnim.SetTrigger("Close");
     }
     private IEnumerator LoadScene()
     {
-        anim.SetTrigger("FadeOut");
+        fadeAnim.SetTrigger("FadeOut");
         yield return new WaitForSeconds(0.5f);
         UnityEngine.SceneManagement.SceneManager.LoadScene(2);
     }

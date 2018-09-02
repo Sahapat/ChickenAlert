@@ -17,8 +17,8 @@ public class Gamecontroller : MonoBehaviour
     [Serializable]
     private class SpawnChickenFrame
     {
-        public Vector2 min;
-        public Vector2 max;
+        public Vector2 min = Vector2.zero;
+        public Vector2 max = Vector2.zero;
     }
     [SerializeField] private SpawnChickenFrame spawnChickenFrame;
     public bool IsGameStart;
@@ -29,8 +29,8 @@ public class Gamecontroller : MonoBehaviour
     private void Awake()
     {
         IsGameStart = false;
-        player1.setProperty(Global.player1Id, Global.player1Isjoy);
-        player2.setProperty(Global.player2Id, Global.player2Isjoy);
+        player1.setProperty(Global.player1Selected);
+        player2.setProperty(Global.player2Selected);
     }
     private void Start()
     {
@@ -60,7 +60,7 @@ public class Gamecontroller : MonoBehaviour
             {
             if (wolfCount < Time.time)
             {
-                GameObject temp = m_wolfcontroller.SpawnWolf();
+                m_wolfcontroller.SpawnWolf();
                 currentWolf++;
                 wolfCount = Time.time + wolfTiming;
             }

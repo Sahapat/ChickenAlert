@@ -4,10 +4,8 @@ using UnityEngine;
 
 public static class Global
 {
-    public static int player1Id = 1;
-    public static bool player1Isjoy = true;
-    public static int player2Id = 2;
-    public static bool player2Isjoy = false;
+    public static ControllerSelector player1Selected = ControllerSelector.None;
+    public static ControllerSelector player2Selected= ControllerSelector.None;
 
     public static int Day = 1;
     public static int chickenRemain = 16;

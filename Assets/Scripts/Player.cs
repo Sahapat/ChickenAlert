@@ -1,14 +1,21 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+public enum ControllerSelector
+{
+    KEYBOARD_RIGHT,
+    KEYBOARD_LEFT,
+    JOYSTICK_FIRST,
+    JOYSTICK_SECOND,
+    None
+};
 
 public class Player : MonoBehaviour
 {
-    [SerializeField] private int playerId;
+    [SerializeField] private ControllerSelector controllerSelecte;
     [SerializeField] private GameObject agentParent;
     [SerializeField] private float Maxspeed = 5f;
     [SerializeField] private float stunDuration = 6f;
-    [SerializeField] private bool isJoy;
     [SerializeField] private Animator anim;
     [SerializeField] private Gamecontroller m_gamecontroller;
     [SerializeField] private ChickenController m_chickenController;
@@ -45,7 +52,7 @@ public class Player : MonoBehaviour
             }
             if (!isStun)
             {
-                if (JoystickInputController.GetUse(playerId, isJoy))
+                if (JoystickInputController.GetUse(controllerSelecte))
                 {
                     if (inventory != null)
                     {
@@ -86,7 +93,7 @@ public class Player : MonoBehaviour
                 }
                 if (pushObject != null)
                 {
-                    if (JoystickInputController.GetPush(playerId, isJoy))
+                    if (JoystickInputController.GetPush(controllerSelecte))
                     {
                         pushObject.transform.parent = this.transform;
                         currentPush = pushObject;
@@ -175,14 +182,13 @@ public class Player : MonoBehaviour
         {
             if (!isStun)
             {
-                Movement(JoystickInputController.GetMovement(playerId, isJoy));
+                Movement(JoystickInputController.GetMovement(controllerSelecte));
             }
         }
     }
-    public void setProperty(int playerId, bool isJoy)
+    public void setProperty(ControllerSelector selected)
     {
-        this.playerId = playerId;
-        this.isJoy = isJoy;
+        this.controllerSelecte = selected;
     }
     public void Stun()
     {

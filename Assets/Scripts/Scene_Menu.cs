@@ -11,12 +11,10 @@ public class Scene_Menu : MonoBehaviour
     private bool isStart;
     private void Start()
     {
-        Global.player1Id = 0;
-        Global.player2Id = 0;
         Global.Day = 1;
         Global.chickenRemain = 20;
-        Global.player1Isjoy = false;
-        Global.player2Isjoy = false;
+        Global.player1Selected = ControllerSelector.None;
+        Global.player2Selected = ControllerSelector.None;
     }
     private void Update()
     {

@@ -8,7 +8,6 @@ public class ChickenController : MonoBehaviour
 {
     public List<Chicken> LandChicken;
     public List<Chicken> FenceChicken;
-    [SerializeField] private int startChickenCount;
     [SerializeField] private Gamecontroller m_gamecontroller;
     public int currentChickCount;
     public bool isHaveWolf;
@@ -20,7 +19,6 @@ public class ChickenController : MonoBehaviour
         if (!m_gamecontroller.IsGameStart && !isSet)
         {
             var temp = FindObjectsOfType<Chicken>();
-            startChickenCount = temp.Length;
             LandChicken.AddRange(temp);
             isSet = true;
         }

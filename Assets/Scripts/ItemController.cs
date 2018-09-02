@@ -28,8 +28,8 @@ public class ItemController : MonoBehaviour
     [Serializable]
     private class SpawnFrame
     {
-        public Vector2 max;
-        public Vector2 min;
+        public Vector2 max = Vector2.zero;
+        public Vector2 min = Vector2.zero;
     }
 
     [SerializeField] private SpawnFrame spawnFrame;
@@ -51,8 +51,7 @@ public class ItemController : MonoBehaviour
                 {
                     float spawnX = UnityEngine.Random.Range(spawnFrame.min.x, spawnFrame.max.x);
                     float spawnZ = UnityEngine.Random.Range(spawnFrame.min.y, spawnFrame.max.y);
-
-                    GameObject temp = Instantiate(plankObj, new Vector3(spawnX, 1.5f, spawnZ), Quaternion.identity);
+                    Instantiate(plankObj, new Vector3(spawnX, 1.5f, spawnZ), Quaternion.identity);
                     currentPlank++;
                     plankCount = Time.time + plankDuration;
                 }
@@ -67,7 +66,7 @@ public class ItemController : MonoBehaviour
                         float spawnX = UnityEngine.Random.Range(spawnFrame.min.x, spawnFrame.max.x);
                         float spawnZ = UnityEngine.Random.Range(spawnFrame.min.y, spawnFrame.max.y);
 
-                        GameObject temp = Instantiate(bombObj, new Vector3(spawnX, 1.5f, spawnZ), Quaternion.identity);
+                        Instantiate(bombObj, new Vector3(spawnX, 1.5f, spawnZ), Quaternion.identity);
                         currentBomb++;
                         bombCount = Time.time + bombDuration;
                     }
@@ -87,7 +86,7 @@ public class ItemController : MonoBehaviour
                         float spawnX = UnityEngine.Random.Range(spawnFrame.min.x, spawnFrame.max.x);
                         float spawnZ = UnityEngine.Random.Range(spawnFrame.min.y, spawnFrame.max.y);
 
-                        GameObject temp = Instantiate(hayObj, new Vector3(spawnX, 1.5f, spawnZ), Quaternion.identity);
+                        Instantiate(hayObj, new Vector3(spawnX, 1.5f, spawnZ), Quaternion.identity);
                         currentHay++;
                         hayCount = Time.time + hayDuration;
                     }
@@ -107,7 +106,7 @@ public class ItemController : MonoBehaviour
                         float spawnX = UnityEngine.Random.Range(spawnFrame.min.x, spawnFrame.max.x);
                         float spawnZ = UnityEngine.Random.Range(spawnFrame.min.y, spawnFrame.max.y);
 
-                        GameObject temp = Instantiate(bootsObj, new Vector3(spawnX, 1.5f, spawnZ), Quaternion.identity);
+                        Instantiate(bootsObj, new Vector3(spawnX, 1.5f, spawnZ), Quaternion.identity);
                         currentBoot++;
                         bootsCount = Time.time + bootsDuration;
                     }
