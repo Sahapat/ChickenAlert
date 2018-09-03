@@ -22,6 +22,11 @@ public class Scene_Menu : MonoBehaviour
         {
             if(Input.anyKey)
             {
+                if(Input.GetKeyDown(KeyCode.Escape))
+                {
+                    Application.Quit();
+                    return;
+                }
                 StartCoroutine(LoadScene());
                 isStart = true;
             }

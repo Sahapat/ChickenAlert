@@ -28,6 +28,11 @@ public class Scene_ControllerSelector : MonoBehaviour
     }
     private void Update()
     {
+        if(Input.GetKeyDown(KeyCode.Escape))
+        {
+            Application.Quit();
+            return;
+        }
         switch (currentState)
         {
             case SelectSceneState.FIRST_SELECTED:
