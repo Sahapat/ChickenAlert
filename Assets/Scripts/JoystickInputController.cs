@@ -77,13 +77,13 @@ public class JoystickInputController : MonoBehaviour
         switch (playerData)
         {
             case ControllerSelector.KEYBOARD_LEFT:
-                return Input.GetKeyDown(KeyCode.G);
+                return Input.GetKey(KeyCode.G);
             case ControllerSelector.KEYBOARD_RIGHT:
-                return Input.GetKeyDown(KeyCode.KeypadPlus);
+                return Input.GetKey(KeyCode.KeypadPlus);
             case ControllerSelector.JOYSTICK_FIRST:
-                return Input.GetKeyDown(KeyCode.Joystick1Button1);
+                return Input.GetKey(KeyCode.Joystick1Button1);
             case ControllerSelector.JOYSTICK_SECOND:
-                return Input.GetKeyDown(KeyCode.Joystick2Button1);
+                return Input.GetKey(KeyCode.Joystick2Button1);
             default: return false;
         }
     }
