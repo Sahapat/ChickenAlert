@@ -102,7 +102,7 @@ public class Scene_ControllerSelector : MonoBehaviour
                 break;
             case SelectSceneState.SHOW_TUTORIAl:
                 if (!tutorialObj.activeSelf) tutorialState();
-                else if (Input.anyKey) StartCoroutine(LoadScene());
+                else if (Input.GetKeyDown(KeyCode.Joystick1Button7)||Input.GetKeyDown(KeyCode.Joystick2Button7)||Input.GetKeyDown(KeyCode.Return)) StartCoroutine(LoadScene());
                 break;
         }
     }
